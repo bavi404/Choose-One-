@@ -72,7 +72,7 @@ class ChoicePickerApp {
     
     // Ensure confirmation dialog is hidden on startup
     if (this.confirmDialog) {
-      this.confirmDialog.hidden = true;
+      this.confirmDialog.style.display = 'none';
       console.log('Confirmation dialog hidden on startup');
     }
     
@@ -247,13 +247,14 @@ class ChoicePickerApp {
     
     const message = `You have ${this.currentChoices.length} choices. This may take a while. Continue?`;
     document.getElementById('confirmMessage').textContent = message;
-    this.confirmDialog.hidden = false;
+    this.confirmDialog.style.display = 'flex';
     this.confirmYes.focus();
     console.log('Dialog shown');
   }
 
   hideConfirmDialog() {
-    this.confirmDialog.hidden = true;
+    this.confirmDialog.style.display = 'none';
+    console.log('Dialog hidden via style.display');
   }
 
   confirmLargeSelection() {

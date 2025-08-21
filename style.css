@@ -414,6 +414,10 @@ textarea:focus {
   z-index: 2000;
 }
 
+.modal-overlay[hidden] {
+  display: none !important;
+}
+
 .modal-content {
   background: var(--primary-bg);
   color: var(--text-primary);
