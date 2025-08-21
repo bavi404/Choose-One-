@@ -35,6 +35,7 @@ import {
 // Application state
 class ChoicePickerApp {
   constructor() {
+    console.log('ChoicePickerApp constructor called');
     this.currentChoices = [];
     this.isSelecting = false;
     this.animationInterval = null;
@@ -46,6 +47,7 @@ class ChoicePickerApp {
     this.loadSavedSettings();
     this.updateRecentChoices();
     this.updateChoiceCounter();
+    console.log('ChoicePickerApp initialization complete');
   }
 
   initializeElements() {
@@ -67,6 +69,12 @@ class ChoicePickerApp {
     this.confirmDialog = document.getElementById('confirmDialog');
     this.confirmYes = document.getElementById('confirmYes');
     this.confirmNo = document.getElementById('confirmNo');
+    
+    // Ensure confirmation dialog is hidden on startup
+    if (this.confirmDialog) {
+      this.confirmDialog.hidden = true;
+      console.log('Confirmation dialog hidden on startup');
+    }
     
     this.textarea.focus();
   }
@@ -211,22 +219,29 @@ class ChoicePickerApp {
   }
 
   startSelection() {
+    console.log('startSelection called, currentChoices:', this.currentChoices.length);
     if (this.isSelecting || this.currentChoices.length < MIN_CHOICES) {
+      console.log('Early return: isSelecting or not enough choices');
       return;
     }
 
     // Only show confirmation dialog if we actually have choices and they exceed the threshold
     if (this.currentChoices.length > 0 && this.currentChoices.length >= LARGE_CHOICE_THRESHOLD) {
+      console.log('Showing confirmation dialog for large selection');
       this.showConfirmDialog();
       return;
     }
 
+    console.log('Proceeding with selection');
     this.performSelection();
   }
 
   showConfirmDialog() {
+    console.log('showConfirmDialog called, currentChoices:', this.currentChoices.length);
     // Safety check: don't show dialog if there are no choices
     if (this.currentChoices.length === 0) {
+      console.log('No choices, hiding dialog');
+      this.hideConfirmDialog();
       return;
     }
     
@@ -234,6 +249,7 @@ class ChoicePickerApp {
     document.getElementById('confirmMessage').textContent = message;
     this.confirmDialog.hidden = false;
     this.confirmYes.focus();
+    console.log('Dialog shown');
   }
 
   hideConfirmDialog() {
