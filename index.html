@@ -4,16 +4,137 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Random Choice Picker</title>
+    <title>Enhanced Random Choice Picker</title>
+    <!-- 
+      Enhanced Choice Picker Features:
+      - Start Over button to reset all inputs and UI state
+      - Live choice counter showing available choices
+      - Confirmation dialog for large choice sets (30+ choices)
+      - Recent choices history (last 5-10 sets)
+      - Input validation with duplicate detection
+      - Animation speed control (Fast/Medium/Slow)
+      - Multiple selection mode (1-3 winners)
+      - Weighted selection with custom weights
+      - History panel with previous results
+      - High contrast theme toggle
+      - Full keyboard navigation support
+      - Screen reader announcements
+      
+      Run tests: npm test (requires Node.js + jsdom)
+    -->
   </head>
   <body>
     <div class="container">
-      <h3>Enter all of the choices divided by a comma (','). <br> Press enter when you're done</h3>
-      <textarea placeholder="Enter choices here..." id="textarea"></textarea>
+      <header>
+        <h1>Enhanced Random Choice Picker</h1>
+        <div class="theme-toggle">
+          <button id="themeToggle" aria-label="Toggle high contrast theme">
+            <span class="theme-icon">🌙</span>
+            <span class="theme-text">High Contrast</span>
+          </button>
+        </div>
+      </header>
 
-      <div id="tags"></div>
+      <main>
+        <section class="input-section" aria-labelledby="instructions">
+          <h3 id="instructions">Enter all of the choices divided by a comma (','). Press enter when you're done</h3>
+          
+          <div class="choice-counter" aria-live="polite">
+            <span id="choiceCount">0 choices available</span>
+          </div>
+          
+          <textarea 
+            placeholder="Enter choices here..." 
+            id="textarea" 
+            aria-describedby="instructions choiceCount"
+            aria-label="Enter your choices separated by commas"
+          ></textarea>
+          
+          <div class="validation-messages" aria-live="assertive">
+            <div id="validationErrors" class="error-message" hidden></div>
+            <div id="duplicateWarning" class="warning-message" hidden></div>
+          </div>
+        </section>
+
+        <section class="controls-section">
+          <div class="control-group">
+            <label for="animationSpeed">Animation Speed:</label>
+            <select id="animationSpeed" aria-describedby="speedHelp">
+              <option value="FAST">Fast</option>
+              <option value="MEDIUM" selected>Medium</option>
+              <option value="SLOW">Slow</option>
+            </select>
+            <div id="speedHelp" class="help-text">Controls how fast the selection animation runs</div>
+          </div>
+          
+          <div class="control-group">
+            <label for="multiPickCount">Winners to Pick:</label>
+            <select id="multiPickCount" aria-describedby="multiPickHelp">
+              <option value="1" selected>1 Winner</option>
+              <option value="2">2 Winners</option>
+              <option value="3">3 Winners</option>
+            </select>
+            <div id="multiPickHelp" class="help-text">Number of choices to select (no duplicates)</div>
+          </div>
+          
+          <div class="control-group">
+            <label for="choiceLabel">Choice Set Label (optional):</label>
+            <input 
+              type="text" 
+              id="choiceLabel" 
+              placeholder="e.g., 'Restaurant Options'"
+              aria-describedby="labelHelp"
+            >
+            <div id="labelHelp" class="help-text">Custom label for saving to recent choices</div>
+          </div>
+        </section>
+
+        <section class="action-section">
+          <button id="startButton" class="primary-button" disabled>
+            Start Selection
+          </button>
+          <button id="resetButton" class="secondary-button">
+            Start Over
+          </button>
+        </section>
+
+        <section class="choices-section" aria-live="polite">
+          <div id="tags" class="tags-container"></div>
+        </section>
+
+        <section class="recent-choices-section" aria-labelledby="recentTitle">
+          <h4 id="recentTitle">Recent Choice Sets</h4>
+          <div class="recent-controls">
+            <select id="recentChoices" aria-label="Select a recent choice set to restore">
+              <option value="">-- Select Recent Set --</option>
+            </select>
+            <button id="clearRecent" class="small-button" aria-label="Clear all recent choice sets">
+              Clear All
+            </button>
+          </div>
+        </section>
+
+        <section class="history-section" aria-labelledby="historyTitle">
+          <h4 id="historyTitle">Selection History</h4>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </main>
+
+      <div id="statusMessage" class="status-message" aria-live="polite" hidden></div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Confirmation Dialog -->
+    <div id="confirmDialog" class="modal-overlay" hidden>
+      <div class="modal-content" role="dialog" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+        <h3 id="confirmTitle">Confirm Large Selection</h3>
+        <p id="confirmMessage">You have many choices. This may take a while. Continue?</p>
+        <div class="modal-actions">
+          <button id="confirmYes" class="primary-button">Yes, Continue</button>
+          <button id="confirmNo" class="secondary-button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
   </body>
 </html>
