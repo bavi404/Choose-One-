@@ -115,6 +115,11 @@ class ChoicePickerApp {
       const choices = this.parseChoices(input);
       this.currentChoices = choices;
       
+      // Hide confirmation dialog if choices are cleared
+      if (choices.length === 0) {
+        this.hideConfirmDialog();
+      }
+      
       this.createTags(choices);
       this.updateChoiceCounter();
       this.updateValidationMessages(choices);
@@ -210,7 +215,8 @@ class ChoicePickerApp {
       return;
     }
 
-    if (this.currentChoices.length >= LARGE_CHOICE_THRESHOLD) {
+    // Only show confirmation dialog if we actually have choices and they exceed the threshold
+    if (this.currentChoices.length > 0 && this.currentChoices.length >= LARGE_CHOICE_THRESHOLD) {
       this.showConfirmDialog();
       return;
     }
@@ -219,6 +225,11 @@ class ChoicePickerApp {
   }
 
   showConfirmDialog() {
+    // Safety check: don't show dialog if there are no choices
+    if (this.currentChoices.length === 0) {
+      return;
+    }
+    
     const message = `You have ${this.currentChoices.length} choices. This may take a while. Continue?`;
     document.getElementById('confirmMessage').textContent = message;
     this.confirmDialog.hidden = false;
@@ -429,6 +440,9 @@ class ChoicePickerApp {
       clearInterval(this.animationInterval);
       this.animationInterval = null;
     }
+    
+    // Hide confirmation dialog when resetting
+    this.hideConfirmDialog();
     
     this.textarea.value = '';
     this.choiceLabel.value = '';
