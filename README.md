@@ -1,6 +1,6 @@
 # Enhanced Random Choice Picker
 
-A feature-rich, accessible random choice picker built with vanilla JavaScript, HTML, and CSS. This application enhances the original simple choice picker with advanced features, better UX, and full accessibility support.
+A feature-rich, accessible random choice picker built with vanilla JavaScript, HTML, and CSS. This application enhances the original simple choice picker with advanced features, better UX, and full accessibility support. Deployed at : https://choose-one-liard.vercel.app
 
 ## ✨ Features
 
